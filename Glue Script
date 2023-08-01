@@ -14,8 +14,8 @@ job.init(args["JOB_NAME"], args)
 
 # Script generated for node Data Catalog table
 DataCatalogtable_node1 = glueContext.create_dynamic_frame.from_catalog(
-    database="nyctaxiyellowdb",
-    table_name="yellowtaxidatapartitioned2",
+    database="db-name",
+    table_name="table-name",
     transformation_ctx="DataCatalogtable_node1"
 )
 
@@ -53,11 +53,11 @@ DataBricksGlueConnector2_node3 = glueContext.write_dynamic_frame.from_options(
     frame=ApplyMapping_node2,
     connection_type="custom.jdbc",
     connection_options={
-        "url": "jdbc:databricks://adb-2509938499734115.15.azuredatabricks.net:443/default;transportMode=http;ssl=1;AuthMech=3;httpPath=/sql/1.0/warehouses/6cdc7092aaed3ff5;PWD=dapi5dd70df211146b2edf831815f356bd87-3",
-        "user": "sonal.chaturvedi@clairvoyantsoft.com",
-        "password": "dapi5dd70df211146b2edf831815f356bd87-3",
-        "dbtable": "`hive_metastore`.`sonaldb`.`newtablefromaws`",
-        "redshiftTmpDir": "s3://aws-glue-yellowtaxidata/forGlue/",
+        "url": "your-jdbc-url;PWD='your-pricate-access-token'",
+        "user": "your-username-on-Databricks",
+        "password": "your-pricate-access-token",
+        "dbtable": "`hive_metastore`.`your-db`.`your-table`",
+        "redshiftTmpDir": "s3://path/to/directory",
         "className": "com.databricks.client.jdbc.Driver"
     },
     transformation_ctx="DataBricksGlueConnector2_node3",
