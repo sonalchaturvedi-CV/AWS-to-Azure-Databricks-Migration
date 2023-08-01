@@ -1,0 +1,66 @@
+import sys
+from awsglue.transforms import *
+from awsglue.utils import getResolvedOptions
+from pyspark.context import SparkContext
+from awsglue.context import GlueContext
+from awsglue.job import Job
+
+args = getResolvedOptions(sys.argv, ["JOB_NAME"])
+sc = SparkContext()
+glueContext = GlueContext(sc)
+spark = glueContext.spark_session
+job = Job(glueContext)
+job.init(args["JOB_NAME"], args)
+
+# Script generated for node Data Catalog table
+DataCatalogtable_node1 = glueContext.create_dynamic_frame.from_catalog(
+    database="nyctaxiyellowdb",
+    table_name="yellowtaxidatapartitioned2",
+    transformation_ctx="DataCatalogtable_node1"
+)
+
+# Script generated for node ApplyMapping
+ApplyMapping_node2 = ApplyMapping.apply(
+    frame=DataCatalogtable_node1,
+    mappings=[
+        ("vendorid", "long", "vendorid", "long"),
+        ("tpep_pickup_datetime", "timestamp", "tpep_pickup_datetime", "timestamp"),
+        ("tpep_dropoff_datetime", "timestamp", "tpep_dropoff_datetime", "timestamp"),
+        ("passenger_count", "double", "passenger_count", "double"),
+        ("trip_distance", "double", "trip_distance", "double"),
+        ("ratecodeid", "double", "ratecodeid", "double"),
+        ("store_and_fwd_flag", "string", "store_and_fwd_flag", "string"),
+        ("pulocationid", "long", "pulocationid", "long"),
+        ("dolocationid", "long", "dolocationid", "long"),
+        ("payment_type", "long", "payment_type", "long"),
+        ("fare_amount", "double", "fare_amount", "double"),
+        ("extra", "double", "extra", "double"),
+        ("mta_tax", "double", "mta_tax", "double"),
+        ("tip_amount", "double", "tip_amount", "double"),
+        ("tolls_amount", "double", "tolls_amount", "double"),
+        ("improvement_surcharge", "double", "improvement_surcharge", "double"),
+        ("total_amount", "double", "total_amount", "double"),
+        ("congestion_surcharge", "double", "congestion_surcharge", "double"),
+        ("airport_fee", "double", "airport_fee", "double"),
+        ("year", "int", "year", "int"),
+        ("month", "int", "month", "int")
+    ],
+    transformation_ctx="ApplyMapping_node2",
+)
+
+# Script generated for node DataBricksGlueConnector2
+DataBricksGlueConnector2_node3 = glueContext.write_dynamic_frame.from_options(
+    frame=ApplyMapping_node2,
+    connection_type="custom.jdbc",
+    connection_options={
+        "url": "jdbc:databricks://adb-2509938499734115.15.azuredatabricks.net:443/default;transportMode=http;ssl=1;AuthMech=3;httpPath=/sql/1.0/warehouses/6cdc7092aaed3ff5;PWD=dapi5dd70df211146b2edf831815f356bd87-3",
+        "user": "sonal.chaturvedi@clairvoyantsoft.com",
+        "password": "dapi5dd70df211146b2edf831815f356bd87-3",
+        "dbtable": "`hive_metastore`.`sonaldb`.`newtablefromaws`",
+        "redshiftTmpDir": "s3://aws-glue-yellowtaxidata/forGlue/",
+        "className": "com.databricks.client.jdbc.Driver"
+    },
+    transformation_ctx="DataBricksGlueConnector2_node3",
+)
+
+job.commit()
