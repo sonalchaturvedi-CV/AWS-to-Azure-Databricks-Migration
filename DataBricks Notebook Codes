@@ -1,0 +1,34 @@
+# Set spark configurations
+spark.conf.set(<storageaccountname>, <Accesskey>)
+
+# Replace the placeholders with your values
+storage_account_name = "yellowtaxi"
+container_name = "s3toad"
+storage_account_key = <Accesskey>
+
+# Mount the storage
+dbutils.fs.mount(
+    source=f"wasbs://{container_name}@{storage_account_name}.blob.core.windows.net",
+    mount_point="/mnt/yellowtaxi",  # Choose a mount point name
+    extra_configs={f"fs.azure.account.key.{storage_account_name}.blob.core.windows.net": storage_account_key}
+)
+
+# Check if storage is mounted
+%fs
+ls dbfs:/mnt/
+
+# Read from file
+file_path = "dbfs:/mnt/yellowtaxi/"
+df = spark.read.parquet(file_path, header=True, inferSchema=True)
+
+#Check if we are able to read the data
+row_count = df.count()
+print("Number of rows in the DataFrame: {}".format(row_count))
+
+#write to delta lake
+df.write.format("delta").saveAsTable("yellowtaxinewdata")
+
+#check data
+%sql
+select * from yellowtaxinewdata limit 10;
+select count(*) from yellowtaxinewdata;
