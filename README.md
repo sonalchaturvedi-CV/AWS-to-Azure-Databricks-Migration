@@ -1,15 +1,4 @@
 # AWS-to-Azure-Databricks-Migration
-
-    Description
-    Upload Files to AWS S3
-    Create EMR Cluster
-    Create IAM Role
-    Add Data to Glue Catalog Table Using Crawler
-    EMR For Creating Partitions
-    Migrate Table Data from AWS to Azure Databricks Using AWS Glue
-    Migrate Table Data from AWS to Azure Blob Storage Using Azure’s “azcopy”
-    Check Migration and Create Delta Table
-
 #**Description**
     The idea of this POC is to use:
     1. AWS EMR: Creating a table in Glue Catalog and creating partitions. 
@@ -18,9 +7,6 @@
     4. Databricks Notebook: Create table in delta lake and copy data by inferring schema from Azure Blob Storage. 
       For this, the plan is to manually trigger an EMR cluster to upload a file into Glue data catalog from S3 bucket and also simultaneously trigger an AWS Glue Job using 
       JDBC connection. 
-
-
-
 
 #**Upload Files to AWS S3**
     1. Create an s3 bucket
@@ -104,4 +90,4 @@ Now we have partitioned data ready.
 2. Read your file from the dbfs file path
 3. Write in delta format and save as new table
 4. Check if data is loaded perfectly
-5. All codes are logged here
+5. All codes can be found in this repo. 
